@@ -3,7 +3,7 @@ const env = process.env.NODE_ENV || "development";
 const config = require(__dirname + "/../config/config.json")[env];
 const db = {};
 
-const CouponMeta = require("./CouponMeta");
+const CouponMeta = require("./couponMeta");
 const Coupon = require("./coupon");
 const Country = require("./country");
 const User = require("./user");
