@@ -5,6 +5,10 @@ module.exports = class CouponMeta extends Sequelize.Model {
     return super.init(
       {
         name: {
+          type: Sequelize.STRING(100),
+          allowNull: false,
+        },
+        target: {
           type: Sequelize.STRING(50),
           allowNull: false,
         },
