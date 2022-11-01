@@ -27,12 +27,12 @@ module.exports = class User extends Sequelize.Model {
       sourceKey: "id",
     });
 
-    db.Country.belongsTo(db.Country, {
+    db.User.belongsTo(db.Country, {
       foreignKey: "country_id",
       targetKey: "id",
     });
 
-    db.Country.hasMany(db.Order, {
+    db.User.hasMany(db.Order, {
       foreignKey: "user_id",
       sourceKey: "id",
     });
