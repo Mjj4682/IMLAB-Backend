@@ -1,9 +1,6 @@
 const fs = require("fs");
 
-const temp = fs.readFileSync(
-  "/Users/lsw4u/Desktop/iamlab/DeliveryCost.xlsx - DeliveryCost.csv",
-  "utf-8"
-);
+const temp = fs.readFileSync(process.env.CSV_URL, "utf-8");
 
 const data = temp.split("\r\n");
 const columns = data[0].split(",");
@@ -21,4 +18,5 @@ const onlyOne = async () => {
   }
   return result;
 };
+
 module.exports = onlyOne;
