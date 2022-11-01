@@ -6,6 +6,4 @@ const couponRouter = require("./couponRouter.js");
 
 router.use("/coupon", couponRouter.router);
 
-router.use("/purchase", purchaseRouter.router);
-
 module.exports = router;
