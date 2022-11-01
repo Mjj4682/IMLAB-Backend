@@ -42,7 +42,8 @@ class ExchangeRate {
 
   getDealRate = async (target) => {
     const value = await this.getExchangeRate(target);
-    return value[0].deal_bas_r;
+    const result = value[0].kftc_bkpr.replace(",", "");
+    return Number(result);
   };
 }
 
