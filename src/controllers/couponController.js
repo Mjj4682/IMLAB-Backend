@@ -31,7 +31,14 @@ const giveCoupon = async (req, res) => {
   res.status(201).json({ message: "gave coupon" });
 };
 
+const getCouponStatistics = async (req, res) => {
+  const couponId = req.params.couponid;
+  const couponStatistics = await couponService.getCouponStatistics(couponId);
+  res.status(201).json({ couponStatistics });
+};
+
 module.exports = {
   createCoupon,
   giveCoupon,
+  getCouponStatistics,
 };

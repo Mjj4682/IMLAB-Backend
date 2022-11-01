@@ -11,6 +11,11 @@ router.post(
   errorHandler(couponController.giveCoupon)
 );
 
+router.get(
+  "/:couponid/statistics",
+  errorHandler(couponController.getCouponStatistics)
+);
+
 module.exports = {
   router,
 };
