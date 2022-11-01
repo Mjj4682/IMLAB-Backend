@@ -37,7 +37,6 @@ class ExchangeRate {
   getExchangeRate = async (target) => {
     const result = await axios(this.config);
     const value = await result.data.filter((obj) => obj.cur_unit === target);
-    console.log(value);
     return value;
   };
 

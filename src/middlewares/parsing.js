@@ -9,14 +9,16 @@ const data = temp.split("\r\n");
 const columns = data[0].split(",");
 const result = {};
 
-for (let i = 2; i < columns.length; i++) {
-  const rows = {};
-  for (let j = 1; j < data.length; j++) {
-    const value = data[j].split(",");
-    const quantity = value[1];
-    rows[quantity] = value[i];
+const onlyOne = async () => {
+  for (let i = 2; i < columns.length; i++) {
+    const rows = {};
+    for (let j = 1; j < data.length; j++) {
+      const value = data[j].split(",");
+      const quantity = value[1];
+      rows[quantity] = value[i];
+    }
+    result[columns[i]] = rows;
   }
-  result[columns[i]] = rows;
-}
-
-module.exports = result;
+  return result;
+};
+module.exports = onlyOne;
