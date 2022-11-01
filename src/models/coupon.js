@@ -26,12 +26,7 @@ module.exports = class Coupon extends Sequelize.Model {
   }
 
   static associate(db) {
-    db.Coupon.belongsTo(db.CouponMeta, {
-      foreignKey: "coupon_meta_id",
-      targetKey: "id",
-    });
-
-    db.Coupon.hasMany(db.User, {
+    db.Coupon.belongsTo(db.User, {
       foreignKey: "user_id",
       sourceKey: "id",
     });

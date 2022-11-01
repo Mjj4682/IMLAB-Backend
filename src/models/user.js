@@ -27,7 +27,7 @@ module.exports = class User extends Sequelize.Model {
       sourceKey: "id",
     });
 
-    db.Country.belongsTo(db.Country, {
+    db.User.belongsTo(db.Country, {
       foreignKey: "country_id",
       targetKey: "id",
     });
