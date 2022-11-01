@@ -29,7 +29,7 @@ module.exports = class Coupon extends Sequelize.Model {
   static associate(db) {
     db.Coupon.belongsTo(db.User, {
       foreignKey: "user_id",
-      sourceKey: "id",
+      targetKey: "id",
     });
     db.Coupon.belongsTo(db.CouponMeta, {
       foreignKey: "coupon_metum_id",

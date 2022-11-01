@@ -16,16 +16,16 @@ const redisServer = async () => {
   redisClient.connect().then();
   const redisCli = redisClient.v4;
 
-  const exchange = new ExchangeRate();
+  // const exchange = new ExchangeRate();
 
-  const a = async () => await exchange.getDealRate("USD");
+  // const a = async () => await exchange.getDealRate("USD");
 
-  a().then(async (res) => {
-    if (await redisCli.exists("doller")) {
-      await redisCli.del("doller");
-    }
-    await redisCli.set("doller", res);
-  });
+  // a().then(async (res) => {
+  //   if (await redisCli.exists("doller")) {
+  //     await redisCli.del("doller");
+  //   }
+  //   await redisCli.set("doller", res);
+  // });
 
   return redisCli;
 };

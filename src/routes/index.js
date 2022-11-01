@@ -1,5 +1,4 @@
 const express = require("express");
-const purchaseRouter = require("./purchaseRouter");
 const router = express.Router();
 
 const purchaseRouter = require("./purchaseRouter");
