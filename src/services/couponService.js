@@ -54,7 +54,31 @@ const giveCoupon = async (couponId, userId, expiredDate) => {
   }
 };
 
+const getCouponStatistics = async (couponId) => {
+  const issuedCount = await Coupon.count({
+    where: { coupon_metum_id: couponId },
+  });
+  const usedCount = await CouponMeta.findOne({
+    attributes: [["count", "usedCount"]],
+    raw: true,
+    where: { id: couponId },
+  });
+  const totalDiscount = await CouponMeta.findOne({
+    attributes: [["total_discount", "totalDiscount"]],
+    raw: true,
+    where: { id: couponId },
+  });
+  const couponStatistics = {
+    issuedCount,
+    ...usedCount,
+    ...totalDiscount,
+  };
+
+  return couponStatistics;
+};
+
 module.exports = {
   createCoupon,
   giveCoupon,
+  getCouponStatistics,
 };
