@@ -45,7 +45,5 @@ class ExchangeRate {
     return value[0].deal_bas_r;
   };
 }
-const exchange = new ExchangeRate();
-const a = async () => await exchange.getDealRate("USD");
-a().then((res) => console.log(res));
+
 module.exports = ExchangeRate;
