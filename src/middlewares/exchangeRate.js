@@ -37,12 +37,14 @@ class ExchangeRate {
   getExchangeRate = async (target) => {
     const result = await axios(this.config);
     const value = await result.data.filter((obj) => obj.cur_unit === target);
+    console.log(value);
     return value;
   };
 
   getDealRate = async (target) => {
     const value = await this.getExchangeRate(target);
-    return value[0].deal_bas_r;
+    const result = value[0].kftc_bkpr.replace(",", "");
+    return Number(result);
   };
 }
 
