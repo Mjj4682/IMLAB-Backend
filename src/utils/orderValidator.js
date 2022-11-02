@@ -25,9 +25,10 @@ module.exports = class OrderRequest {
 
   getUpdatedata = async () => {
     const { orderId, state } = this.data.params;
+    const { delivery_num } = this.data.body;
     const deliveryStateId = undefined;
 
-    if (!state || !orderId) {
+    if (!state && !orderId && delivery_num) {
       throw error("Key_Error", 400);
     }
 
@@ -43,6 +44,6 @@ module.exports = class OrderRequest {
     for (value of deliveryStatus) {
       deliveryStateId = value.id;
     }
-    return { deliveryStateId, orderId };
+    return { deliveryStateId, orderId, deliveryNum: delivery_num };
   };
 };

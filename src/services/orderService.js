@@ -82,6 +82,7 @@ const updateDeliveryStatus = async (data) => {
   const result = await Order.update(
     {
       delivery_state_id: data.stateId,
+      delivery_number: data.deliveryNum,
     },
     {
       where: {

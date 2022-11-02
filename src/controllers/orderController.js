@@ -30,6 +30,8 @@ const updateDeliveryState = async (req, res) => {
   const updateParam = await orderRequest.getUpdatedata();
   const orderUpated = await updateDeliveryStatus(updateParam);
 
+  if (!orderUpated) throw new error("Invalid_Value", 400);
+
   await res.status(200).json(orderUpated);
 };
 
