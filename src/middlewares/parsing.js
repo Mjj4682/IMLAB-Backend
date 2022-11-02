@@ -1,7 +1,11 @@
 require("dotenv").config();
 const fs = require("fs");
+const path = require("path");
 
-const rawDeliveryCost = fs.readFileSync(process.env.CSV_URL, "utf-8");
+const rawDeliveryCost = fs.readFileSync(
+  path.resolve(__dirname, "../../DeliveryCost.csv"),
+  "utf-8"
+);
 
 const data = rawDeliveryCost.split("\r\n");
 const columns = data[0].split(",");
