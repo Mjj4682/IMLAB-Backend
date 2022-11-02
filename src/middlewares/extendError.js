@@ -1,4 +1,14 @@
+/**
+ * imports environment variables
+ */
+
 const errorConstructor = require("./errorConstructor");
+
+/**
+ * 만약 비어있는 value 가 있다면 에러를 던진다.
+ * [빈 배열] 도 에러를 던진다.
+ * @param {object | any} obj
+ */
 
 const findKeyError = (obj) => {
   if (typeof obj === "object") {
@@ -19,6 +29,12 @@ const findKeyError = (obj) => {
     }
   }
 };
+
+/**
+ * module exports.
+ * @public
+ */
+
 module.exports = {
   findKeyError,
 };

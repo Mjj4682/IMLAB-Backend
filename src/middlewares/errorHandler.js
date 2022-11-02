@@ -1,3 +1,9 @@
+/**
+ * try catch 반복될 경우 사용한다. 중복되는 코드를 감소.
+ * @param {*} asyncController
+ * @returns: 없음
+ */
+
 function errorHandler(asyncController) {
   return async (req, res) => {
     try {
@@ -8,5 +14,10 @@ function errorHandler(asyncController) {
     }
   };
 }
+
+/**
+ * module exports
+ * @public
+ */
 
 module.exports = errorHandler;
