@@ -78,14 +78,14 @@ const getOne = async (queryData) => {
   const orderDatail = await Order.findOne();
 };
 
-const updateOrderStatus = async (data) => {
+const updateDeliveryStatus = async (data) => {
   const result = await Order.update(
     {
-      order_state_id: data.stateId,
+      delivery_state_id: data.stateId,
     },
     {
       where: {
-        id: data.orderId,
+        [Op.and]: [{ id: data.orderId }, { order_state_id: { [Op.gte]: 2 } }],
       },
       raw: true,
     }
@@ -96,5 +96,5 @@ const updateOrderStatus = async (data) => {
 module.exports = {
   getList,
   getOne,
-  updateOrderStatus,
+  updateDeliveryStatus,
 };

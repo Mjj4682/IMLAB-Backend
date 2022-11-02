@@ -2,7 +2,7 @@ const OrderRequest = require("../utils/orderValidator");
 const {
   getList,
   getOne,
-  updateOrderStatus,
+  updateDeliveryStatus,
 } = require("../services/orderService");
 
 const makeOrder = async (req, res) => {
@@ -25,10 +25,10 @@ const getOrderDetail = async (req, res) => {
   res.status(200).json(result);
 };
 
-const updateOrderState = async (req, res) => {
+const updateDeliveryState = async (req, res) => {
   const orderRequest = new OrderRequest(req);
   const updateParam = await orderRequest.getUpdatedata();
-  const orderUpated = await updateOrderStatus(updateParam);
+  const orderUpated = await updateDeliveryStatus(updateParam);
 
   await res.status(200).json(orderUpated);
 };
@@ -37,5 +37,5 @@ module.exports = {
   makeOrder,
   getOrderList,
   getOrderDetail,
-  updateOrderState,
+  updateDeliveryState,
 };
