@@ -55,6 +55,15 @@ class ExchangeRate {
   }
 
   /**
+   * 외부 API 를 호출해 값을 가져온다.
+   * @returns: 객체
+   */
+
+  getRawDataOfExchange = async () => {
+    return await axios(this.config);
+  };
+
+  /**
    * @summary: 한국수출입은행 환율 정보 api => 필요한 환율 정보만 get
    * @param: target => type: string, ex) 'USD', 'JPY', 'KRW'
    * @return: {..."cur_unit":null,"ttb":null,"tts":null,"deal_bas_r":null...}
@@ -63,7 +72,7 @@ class ExchangeRate {
 
   getExchangeRate = async (target) => {
     try {
-      const result = await axios(this.config);
+      const result = await this.getRawDataOfExchange();
       const value = await result.data.filter((obj) => obj.cur_unit === target);
       return value;
     } catch (err) {
