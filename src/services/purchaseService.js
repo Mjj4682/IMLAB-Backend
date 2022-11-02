@@ -1,16 +1,13 @@
 const error = require("../middlewares/errorConstructor");
-const { Coupon, Country, sequelize, Order, CouponMeta } = require("../models");
+const {
+  Coupon,
+  Country,
+  sequelize,
+  Order,
+  CouponMeta,
+  User,
+} = require("../models");
 const { getDollerRate, getDeliveryCost } = require("../middlewares/redis");
-
-const getNow = async () => {
-  const now = new Date();
-  const year = String(now.getFullYear()).padStart(2, "0");
-  const month = String(now.getMonth()).padStart(2, "0");
-  const day = String(now.getDay()).padStart(2, "0");
-
-  const tmp = `${year}-${month}-${day}`;
-  return tmp;
-};
 
 // 총 할인액 계산
 const getDiscount = async (
@@ -46,10 +43,16 @@ const getDiscount = async (
 
 // 구매하기
 const addPurchase = async (userId, price, quantity, countryId, couponId) => {
-  const today = getNow();
+  const today = new Date();
   const getExchange = await getDollerRate();
   const exchangRate = Number(getExchange.replace(",", ""));
   const deliveryCost = await getDeliveryCost();
+  const checkUser = await User.findOne({
+    where: { id: userId },
+  });
+  if (!checkUser) {
+    throw new error("INVALID_USER", 400);
+  }
   const checkCountry = await Country.findOne({
     attributes: ["name"],
     raw: true,
@@ -73,14 +76,10 @@ const addPurchase = async (userId, price, quantity, countryId, couponId) => {
   if (couponId) {
     const checkCoupon = await Coupon.findOne({
       attributes: ["expired_date", "used", "coupon_metum_id"],
-      raw: true,
       where: { id: couponId },
     });
-    if (
-      !checkCoupon ||
-      checkCoupon.expired_date < today ||
-      checkCoupon.used === 1
-    ) {
+    const expiredDate = checkCoupon.expired_date;
+    if (!checkCoupon || expiredDate < today || checkCoupon.used === 1) {
       throw new error("INVALID_COUPON", 400);
     }
     const t = await sequelize.transaction();

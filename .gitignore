@@ -105,3 +105,4 @@ dist
 
 .DS_Store
 src/config/
+jest.config.js
