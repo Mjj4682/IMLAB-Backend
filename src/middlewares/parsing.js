@@ -8,21 +8,26 @@ const rawDeliveryCost = fs.readFileSync(
 );
 
 const data = rawDeliveryCost.split("\r\n");
+
 const columns = data[0].split(",");
 
 const result = {};
 
 const processDeliveryCost = async () => {
-  for (let i = 2; i < columns.length; i++) {
-    const rows = {};
-    for (let j = 1; j < data.length; j++) {
-      const value = data[j].split(",");
-      const quantity = value[1];
-      rows[quantity] = value[i];
+  try {
+    for (let i = 2; i < columns.length; i++) {
+      const rows = {};
+      for (let j = 1; j < data.length; j++) {
+        const value = data[j].split(",");
+        const quantity = value[1];
+        rows[quantity] = value[i];
+      }
+      result[columns[i]] = rows;
     }
-    result[columns[i]] = rows;
+    return result;
+  } catch (err) {
+    throw new error("fail: processDeliveryCost", 500);
   }
-  return result;
 };
 
 module.exports = processDeliveryCost;

@@ -1,5 +1,6 @@
 require("dotenv").config();
 const axios = require("axios");
+const error = require("./errorConstructor");
 
 class Today {
   constructor() {
@@ -35,15 +36,25 @@ class ExchangeRate {
   }
 
   getExchangeRate = async (target) => {
-    const result = await axios(this.config);
-    const value = await result.data.filter((obj) => obj.cur_unit === target);
-    return value;
+    try {
+      const result = await axios(this.config);
+      const value = await result.data.filter((obj) => obj.cur_unit === target);
+      return value;
+    } catch (err) {
+      console.log(err);
+      throw new error("fail: getExchangeRate", 500);
+    }
   };
 
   getDealRate = async (target) => {
-    const value = await this.getExchangeRate(target);
-    const result = value[0].kftc_bkpr.replace(",", "");
-    return Number(result);
+    try {
+      const value = await this.getExchangeRate(target);
+      const result = value[0].kftc_bkpr.replace(",", "");
+      return Number(result);
+    } catch (err) {
+      console.log(err);
+      throw new error("fail: getDealRate", 500);
+    }
   };
 }
 
