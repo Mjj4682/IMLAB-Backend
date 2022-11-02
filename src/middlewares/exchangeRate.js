@@ -1,6 +1,20 @@
+/**
+ * imports environment variables
+ */
+
 require("dotenv").config();
+
+/**
+ * module dependencies.
+ * @public
+ */
+
 const axios = require("axios");
 const error = require("./errorConstructor");
+
+/**
+ * @summary: yyyymmdd 형식으로 날짜 계산.
+ */
 
 class Today {
   constructor() {
@@ -12,6 +26,7 @@ class Today {
   };
 
   getMonth = () => {
+    //getMonth 0-11 이므로 1을 더함
     return String(this.now.getMonth() + 1).padStart(2, "0");
   };
 
@@ -24,6 +39,10 @@ class Today {
   };
 }
 
+/**
+ * @summary 실시간 환율 조회.
+ */
+
 class ExchangeRate {
   constructor() {
     this.today = new Today().getToday();
@@ -35,6 +54,13 @@ class ExchangeRate {
     };
   }
 
+  /**
+   * @summary: 한국수출입은행 환율 정보 api => 필요한 환율 정보만 get
+   * @param: target => type: string, ex) 'USD', 'JPY', 'KRW'
+   * @return: {..."cur_unit":null,"ttb":null,"tts":null,"deal_bas_r":null...}
+   * @type: object
+   */
+
   getExchangeRate = async (target) => {
     try {
       const result = await axios(this.config);
@@ -45,6 +71,13 @@ class ExchangeRate {
       throw new error("fail: getExchangeRate", 500);
     }
   };
+
+  /**
+   * @summary:
+   * @param target => type: string, ex) 'USD', 'JPY', 'KRW'
+   * @return: ex)1421
+   * @type: number
+   */
 
   getDealRate = async (target) => {
     try {
@@ -58,4 +91,9 @@ class ExchangeRate {
   };
 }
 
-module.exports = ExchangeRate;
+/**
+ * module exports.
+ * @public
+ */
+
+module.exports = { ExchangeRate, Today };
