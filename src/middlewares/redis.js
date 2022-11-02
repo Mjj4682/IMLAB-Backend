@@ -2,6 +2,7 @@ require("dotenv").config();
 const redis = require("redis");
 const ExchangeRate = require("./exchangeRate");
 const processDeliveryCost = require("./parsing");
+const error = require("./errorConstructor");
 
 const redisServer = async () => {
   const redisClient = redis.createClient({
@@ -27,36 +28,62 @@ const setDollerRate = async () => {
 
   const getRawData = async () => await exchange.getDealRate("USD");
 
-  getRawData().then(async (res) => {
-    if (await redis.exists("doller")) {
-      await redis.del("doller");
-    }
-    await redis.set("doller", res);
-  });
+  getRawData()
+    .then(async (res) => {
+      if (await redis.exists("doller")) {
+        await redis.del("doller");
+      }
+      await redis.set("doller", res);
+    })
+    .catch((err) => {
+      console.log(err);
+      throw new error("redis error", 500);
+    });
 };
 
 const setDeliveryCost = async () => {
-  const result = await processDeliveryCost();
+  try {
+    const result = await processDeliveryCost();
 
-  const redis = await redisServer();
+    const redis = await redisServer();
 
-  if (await redis.exists("deliveryCost")) {
-    await redis.del("deliveryCost");
+    if (await redis.exists("deliveryCost")) {
+      await redis.del("deliveryCost");
+    }
+
+    return await redis.set("deliveryCost", JSON.stringify(result));
+  } catch (err) {
+    console.log(err);
+    throw new error("fail: setDeliveryCost", 500);
   }
-
-  await redis.set("deliveryCost", JSON.stringify(result));
 };
 
 const getDeliveryCost = async () => {
-  const redis = await redisServer();
-  const val = JSON.parse(await redis.get("deliveryCost"));
-  return val;
+  try {
+    const redis = await redisServer();
+    const val = JSON.parse(await redis.get("deliveryCost"));
+    return val;
+  } catch (err) {
+    console.log(err);
+    throw new error("fail: getDeliveryCost", 500);
+  }
 };
 
 const getDollerRate = async () => {
-  const redis = await redisServer();
-  const result = await redis.get("doller");
-  return result;
+  try {
+    const redis = await redisServer();
+    const result = await redis.get("doller");
+    return result;
+  } catch (err) {
+    console.log(err);
+    throw new error("fail: getDollerRate", 500);
+  }
 };
 
-module.exports = { redisServer, getDeliveryCost, getDollerRate };
+module.exports = {
+  redisServer,
+  getDeliveryCost,
+  getDollerRate,
+  setDollerRate,
+  setDeliveryCost,
+};
