@@ -36,46 +36,22 @@
 
 
 <!-- ABOUT THE PROJECT -->
-# [프리온보딩] 웨인힐스벤처스 게시판 서버 개발 프로젝트
+# [프리온보딩] IMLAB 서버 개발 프로젝트
 
 ## About The Project
 
 ### 프로젝트 개요
 
 #### 서비스 개요
-    - 유저의 회원가입 및 로그인
-    - 권한별 게시판 차등화 기능 
-    - 게시판 기능
-    - 유저별 통계 기능
-- 요구사항
-    - 필수 데이터: 회원정보. 필수 데이터를 제외한 나머지 데이터는 자유롭게 추가 가능하다. 자세한 추가 사항은 ERD 항목 참조.
-        - columns:
-            - 고객명
-            - 회원등급
-            - 성별
-            - 나이
-            - 연락처
-            - 가입일
-            - 마지막 접속일
-    - REST API 개발(요구 기능)
-        - 회원가입 / 로그인(소셜 로그인, 비 소셜 로그인) / 회원탈퇴
-        - 이용자 통계 집계 기능(예: 성별, 나이별, 접속 시간별 통계)
-        - 게시판: 등급에 따라 기능 이용에 차등 필요
-        - 회원등급: 3등급으로 나눴다(관리자, 매니저, 일반회원)
-        - 등급에 따른 기능 이용
-            
-            
-            |  | 관리자 | 매니저 | 일반 회원 | 비고 |
-            | --- | --- | --- | --- | --- |
-            | 공지사항 | C,R,U,D | R | R | 모두 읽을 수 있음 |
-            | 운영 게시판 | C,R,U,D | C,R,U,D | 없음 | U 는 쓴 사람과 관리자 |
-            | 자유 게시판 | C,R,U,D | C,R,U,D | C,R,U,D | U 는 오직 쓴 사람만 가능 |
-            | 비고 | 관리자는 모든 게시물 삭제 가능.  | 매니저는 자유 게시판의 게시물을 모두 지울 수 있음 |  |  |
+    - 
+- 
 - 개발 조건
     - database 는 RDB 사용
-    - 통계가 다양할수록 가산점 존재
-    - 그 외 자유롭게 개발
-    - 제출 항목은 신경쓰지 않아도 괜찮다.(멘토님 말씀)
+    - 실시간 환율은 가산점
+    - 규격에 맞게 개발
+    - 요구 사항에 맞게 테스트 코드 작성시 가산점
+    - 쿠폰 시스템에 맞게 데이터베이스 작성
+    - 주어진 데이터 쓸것
 - 책임
     
     
@@ -85,18 +61,19 @@
     |  | 데이터베이스 작성 | 초기 환경 셋팅 / ERD 작성 |  |
 - 개발 우선순위
     1. 완성: 일정 준수 / API 정상 작동 / 코딩 컨벤션 / 코드패키지 구조
-        1. 2022.10.28.금요일 23:59 까지 API 완성
-        2. API 정상 작동 테스트: 금요일 17:00-24:00 까지
-        3. 금요일 내로 README 작성
+        1. 2022.11.2.수요일 23:59 까지 API 완성
+        2. API 정상 작동 테스트: 수요일 17:00-24:00 까지
+        3. 수요일 내로 README 작성
     2. 완성도: 비즈니스 로직 / 확장과 성능을 고려한 개발 
-        1. 테스트 코드 작성
+        1. 테스트 케이스 작성 및 구현
     3. 추가 구현: 자세한 내용은 아래에 있음
-        1. 금요일 이후에 구현 
+        1. 수요일 이후에 구현 
 - 추가 구현 목표
-    - 게시판(우선순위): 좋아요 / 댓글 / 이미지 삽입(AWS S3) / Cache(node-cache 또는 LRU-cache 또는 Redis)
+    - 배포: docker / AWS 
 
 ### ERD
-<img width="880" alt="스크린샷 2022-10-19 오후 7 14 59" src="https://user-images.githubusercontent.com/88824305/198552155-0b658e53-5dc6-4568-9c9c-a07247bce9f0.png">
+<img width="880" alt="ERD" src="https://user-images.githubusercontent.com/88824305/199491770-1b73edf6-a799-4c25-8a57-5a39ec1bd565.jpg">
+
 </br>
 
 - grade table: 사용자의 등급을 정해서 게시판 기능 이용에 차등을 주도록 설계했음
@@ -114,6 +91,7 @@
 - Discord
 - Jest
 - Supertest
+- Redis
 
 
 
@@ -121,47 +99,47 @@
 ## Getting Started
 ```
 .
+├── DeliveryCost.csv
 ├── app.js
 ├── package-lock.json
 ├── package.json
 ├── server.js
 └── src
-    ├── config
-    │   └── config.json
     ├── controllers
-    │   ├── boardController.js
-    │   ├── index.js
-    │   ├── statisticsController.js
-    │   └── userController.js
+    │   ├── couponController.js
+    │   ├── orderController.js
+    │   └── purchaseController.js
     ├── middlewares
-    │   ├── auth.js
-    │   ├── boardAccess.js
-    │   ├── container.js
     │   ├── errorConstructor.js
     │   ├── errorHandler.js
-    │   └── extendError.js
+    │   ├── exchangeRate.js
+    │   ├── extendError.js
+    │   ├── parsing.js
+    │   └── redis.js
     ├── models
-    │   ├── board.js
-    │   ├── gender.js
-    │   ├── grade.js
+    │   ├── country.js
+    │   ├── coupon.js
+    │   ├── couponMeta.js
+    │   ├── deliveryState.js
     │   ├── index.js
-    │   ├── platformType.js
-    │   ├── type.js
-    │   ├── user.js
-    │   └── user_access.js
+    │   ├── order.js
+    │   ├── orderState.js
+    │   └── user.js
     ├── routes
-    │   ├── boardRouter.js
+    │   ├── couponRouter.js
     │   ├── index.js
-    │   ├── statisticsRouter.js
-    │   └── userRouter.js
+    │   ├── orderRouter.js
+    │   └── purchaseRouter.js
     ├── services
-    │   ├── boardService.js
-    │   ├── index.js
-    │   ├── statisticsService.js
-    │   └── userService.js
-    └── tests
-        ├── boardService.test.js
-        └── middlewares.test.js
+    │   ├── couponService.js
+    │   ├── orderService.js
+    │   └── purchaseService.js
+    ├── tests
+    │   ├── deliveryCost.test.js
+    │   ├── exchangeRate.test.js
+    │   └── redis.test.js
+    └── utils
+        └── orderValidator.js
 ```
 
 ### 환경셋팅
@@ -181,8 +159,7 @@
 <!-- USAGE EXAMPLES -->
 ## Usage
 
-[API 명세](https://docs.google.com/spreadsheets/d/1ei1Tc8sxuUlmtTEqNQ5c1Vg1pX1fGxCkmewfgoIq6qY/edit#gid=1153640910)
-
+[API 명세]
 
 <!-- ROADMAP -->
 ## Roadmap
