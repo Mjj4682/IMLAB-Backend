@@ -15,21 +15,27 @@ const processDeliveryCost = require("./parsing");
 const error = require("./errorConstructor");
 
 /**
+ * redis server 의 설정값.
+ */
+
+const config = {
+  url: `redis://${process.env.REDIS_USERNAME}:${process.env.REDIS_PASSWORD}@${process.env.REDIS_HOST}:${process.env.REDIS_PORT}/0`,
+  legacyMode: true,
+};
+
+/**
  * redis cloud 서버 시작. 로컬 메모리를 사용하지 않는다.
  * return 값으로 set, get 등의 명령이 가능함.
- * @param: 없음
+ * @param: config
  * @returns: redisCli 객체
  */
 
-const redisServer = async () => {
-  const redisClient = redis.createClient({
-    url: `redis://${process.env.REDIS_USERNAME}:${process.env.REDIS_PASSWORD}@${process.env.REDIS_HOST}:${process.env.REDIS_PORT}/0`,
-    legacyMode: true,
-  });
+const redisServer = async (config) => {
+  const redisClient = redis.createClient(config);
 
-  redisClient.on("connect", () => console.info("Redis connected"));
+  redisClient.on("connect", () => {});
   redisClient.on("error", (err) => {
-    console.error("Redis Client Error", err);
+    throw new error("redis: fail to start");
   });
 
   redisClient.connect().then();
@@ -47,7 +53,7 @@ const redisServer = async () => {
 const setDollerRate = async () => {
   const exchange = new ExchangeRate();
 
-  const redis = await redisServer();
+  const redis = await redisServer(config);
 
   const getRawData = async () => await exchange.getDealRate("USD");
 
@@ -57,11 +63,14 @@ const setDollerRate = async () => {
         await redis.del("doller");
       }
       await redis.set("doller", res);
+      await redis.quit();
     })
     .catch((err) => {
       console.log(err);
       throw new error("redis error", 500);
     });
+
+  return "OK";
 };
 
 /**
@@ -72,15 +81,17 @@ const setDollerRate = async () => {
 
 const setDeliveryCost = async () => {
   try {
-    const result = await processDeliveryCost();
+    const value = await processDeliveryCost();
 
-    const redis = await redisServer();
+    const redis = await redisServer(config);
 
     if (await redis.exists("deliveryCost")) {
       await redis.del("deliveryCost");
     }
 
-    return await redis.set("deliveryCost", JSON.stringify(result));
+    const result = await redis.set("deliveryCost", JSON.stringify(value));
+    await redis.quit();
+    return result;
   } catch (err) {
     console.log(err);
     throw new error("fail: setDeliveryCost", 500);
@@ -96,8 +107,9 @@ const setDeliveryCost = async () => {
 
 const getDeliveryCost = async () => {
   try {
-    const redis = await redisServer();
+    const redis = await redisServer(config);
     const val = JSON.parse(await redis.get("deliveryCost"));
+    await redis.quit();
     return val;
   } catch (err) {
     console.log(err);
@@ -114,8 +126,9 @@ const getDeliveryCost = async () => {
 
 const getDollerRate = async () => {
   try {
-    const redis = await redisServer();
+    const redis = await redisServer(config);
     const result = await redis.get("doller");
+    await redis.quit();
     return result;
   } catch (err) {
     console.log(err);
