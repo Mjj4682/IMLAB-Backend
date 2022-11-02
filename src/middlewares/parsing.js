@@ -1,21 +1,11 @@
 require("dotenv").config();
 const fs = require("fs");
-const error = require("./errorConstructor");
+const path = require("path");
 
-const readFile = () => {
-  try {
-    const result = fs.readFileSync(process.env.CSV_URL, "utf-8");
-    if (!result) {
-      throw new error("fail: empty result", 500);
-    }
-    return result;
-  } catch (err) {
-    console.log(err);
-    throw new error("read file error", 500);
-  }
-};
-
-const rawDeliveryCost = readFile();
+const rawDeliveryCost = fs.readFileSync(
+  path.resolve(__dirname, "../../DeliveryCost.csv"),
+  "utf-8"
+);
 
 const data = rawDeliveryCost.split("\r\n");
 
