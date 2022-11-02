@@ -25,22 +25,25 @@ module.exports = class OrderRequest {
 
   getUpdatedata = async () => {
     const { orderId, state } = this.data.params;
-    const stateId = undefined;
+    const { delivery_num } = this.data.body;
+    const deliveryStateId = undefined;
 
-    if (!state || !orderId) {
+    if (!state && !orderId && delivery_num) {
       throw error("Key_Error", 400);
     }
 
-    const status = await OrderState.findAll({
+    const deliveryStatus = await OrderState.findAll({
       attributes: ["id"],
-      where: { name: state },
+      where: { name: { [Op.like]: `%${state}` } },
     });
-    if (status.length !== 1) {
+
+    if (deliveryStatus.length !== 1) {
       throw new error("Invalid_Value", 400);
     }
-    for (value of status) {
-      stateId = value.id;
+
+    for (value of deliveryStatus) {
+      deliveryStateId = value.id;
     }
-    return { stateId, orderId };
+    return { deliveryStateId, orderId, deliveryNum: delivery_num };
   };
 };

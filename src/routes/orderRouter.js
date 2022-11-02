@@ -10,7 +10,7 @@ router.get(
 router.get("/list", errorHandler(orderController.getOrderList));
 router.patch(
   "/:orderId(\\d+)/:state",
-  errorHandler(orderController.updateOrderState)
+  errorHandler(orderController.updateDeliveryState)
 );
 module.exports = {
   router,
