@@ -1,7 +1,7 @@
 require("dotenv").config();
 const redis = require("redis");
 const ExchangeRate = require("./exchangeRate");
-const deliveryCost = require("./parsing");
+const processDeliveryCost = require("./parsing");
 
 const redisServer = async () => {
   const redisClient = redis.createClient({
@@ -13,26 +13,37 @@ const redisServer = async () => {
   redisClient.on("error", (err) => {
     console.error("Redis Client Error", err);
   });
+
   redisClient.connect().then();
   const redisCli = redisClient.v4;
-
-  // const exchange = new ExchangeRate();
-
-  // const a = async () => await exchange.getDealRate("USD");
-
-  // a().then(async (res) => {
-  //   if (await redisCli.exists("doller")) {
-  //     await redisCli.del("doller");
-  //   }
-  //   await redisCli.set("doller", res);
-  // });
 
   return redisCli;
 };
 
-const setDeliveryCost = async () => {
-  const result = await deliveryCost();
+const setDollerRate = async () => {
+  const exchange = new ExchangeRate();
+
   const redis = await redisServer();
+
+  const getRawData = async () => await exchange.getDealRate("USD");
+
+  getRawData().then(async (res) => {
+    if (await redis.exists("doller")) {
+      await redis.del("doller");
+    }
+    await redis.set("doller", res);
+  });
+};
+
+const setDeliveryCost = async () => {
+  const result = await processDeliveryCost();
+
+  const redis = await redisServer();
+
+  if (await redis.exists("deliveryCost")) {
+    await redis.del("deliveryCost");
+  }
+
   await redis.set("deliveryCost", JSON.stringify(result));
 };
 

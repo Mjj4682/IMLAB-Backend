@@ -1,12 +1,14 @@
+require("dotenv").config();
 const fs = require("fs");
 
-const temp = fs.readFileSync(process.env.CSV_URL, "utf-8");
+const rawDeliveryCost = fs.readFileSync(process.env.CSV_URL, "utf-8");
 
-const data = temp.split("\r\n");
+const data = rawDeliveryCost.split("\r\n");
 const columns = data[0].split(",");
+
 const result = {};
 
-const onlyOne = async () => {
+const processDeliveryCost = async () => {
   for (let i = 2; i < columns.length; i++) {
     const rows = {};
     for (let j = 1; j < data.length; j++) {
@@ -19,4 +21,4 @@ const onlyOne = async () => {
   return result;
 };
 
-module.exports = onlyOne;
+module.exports = processDeliveryCost;
