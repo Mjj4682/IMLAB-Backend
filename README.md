@@ -165,6 +165,9 @@
 | METHOD | URL | 사용예시 | request | response |
 | --- | --- | --- | --- | --- |
 | POST | /purchase/:userId | /purchase/1 | {</br>"price": 100,</br>"quantity": 2,</br>"countryId": 221,</br>"couponId": 2</br>} | {</br>message: "Purchase success"</br>} |
+| POST | /coupon | /coupon | {</br>"couponName" : "가을 배송비 쿠폰",</br>"couponTarget" : "배송비"</br>} | {</br>message: "message": "created coupon"</br>} |
+| POST | /coupon/:couponId/user/:userId | /coupon/5/user/1 | {</br>"expiredDate" : "2022-11-15"</br>} | {</br>message: "message": "gave coupon"</br>} |
+| GET | /coupon/:couponId/statistics | /coupon/5/statistics | // | {</br>"couponStatistics": {</br>"issuedCount": 2,</br>"usedCount": 8, </br>"totalDiscount": "80000.0"</br>}</br>}|
 
 </br>
 [테스트케이스 테이블]
