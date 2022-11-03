@@ -2,14 +2,10 @@ require("dotenv").config();
 
 const { createApp } = require("./app");
 const { sequelize } = require("./src/models");
-const { setDollerRate, setDeliveryCost } = require("./src/middlewares/redis");
 
 const startServer = async () => {
   const app = createApp();
   const PORT = process.env.PORT;
-
-  await setDollerRate();
-  await setDeliveryCost();
 
   await sequelize
     .sync({ force: false, alter: true })
