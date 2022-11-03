@@ -164,7 +164,7 @@
 
 | METHOD | URL | 사용예시 | request | response |
 | --- | --- | --- | --- | --- |
-| POST | /purchase/:userId | /purchase/1 | {"price": 100, "quantity": 2, "countryId": 221, "couponId": 2} | {message: "Purchase success"} |
+| POST | /purchase/:userId | /purchase/1 | {</br>"price": 100,</br>"quantity": 2,</br>"countryId":</br>221,</br>"couponId": 2</br>} | {</br>message: "Purchase success"</br>} |
 
 </br>
 [테스트케이스 테이블]
