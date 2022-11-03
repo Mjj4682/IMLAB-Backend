@@ -34,9 +34,7 @@ const redisServer = async (config) => {
   const redisClient = redis.createClient(config);
 
   redisClient.on("connect", () => {});
-  redisClient.on("error", (err) => {
-    throw new error("redis: fail to start");
-  });
+  redisClient.on("error", (err) => {});
 
   redisClient.connect().then();
   const redisCli = redisClient.v4;
