@@ -161,6 +161,10 @@
 ## Usage
 
 [API 명세]
+
+| METHOD | URL | 사용예시 | request | response |
+| --- | --- | --- | --- | --- |
+
 </br>
 [테스트케이스 테이블]
 
