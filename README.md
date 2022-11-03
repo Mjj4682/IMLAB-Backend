@@ -76,14 +76,13 @@
     - 배포: docker / AWS 
 
 ### ERD
-<img width="880" alt="ERD" src="https://user-images.githubusercontent.com/88824305/199491770-1b73edf6-a799-4c25-8a57-5a39ec1bd565.jpg">
+<img width="880" alt="ERD" src="https://user-images.githubusercontent.com/88824305/199638458-b6491fae-fc4c-45df-a889-63f13b8551a6.jpg">
 
 </br>
 
-- grade table: 사용자의 등급을 정해서 게시판 기능 이용에 차등을 주도록 설계했음
-- board table: 기능 이용 등급 차등화를 위해서 게시판에도 등급을 부여했음(type table)
-- user table: soft delete 와 hard delete 를 구분했음. deleted_at 칼럼을 작성함.
-- user table: 소셜 로그인과 로컬 로그인 가능. name 이 겹칠 우려가 있어 platform_type table 작성함.
+- deliveryCost 는 Redis 서버를 사용함
+- deliveryCost 는 csv 문서로 업데이트 한다고 가정함
+- deliveryCost 는 항목이 자주 업데이트 된다고 가정함. 그래서 파일을 읽고 가공하여 redis 로 업데이트 하도록 구현함.
 
 ### Built With
 
