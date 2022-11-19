@@ -79,7 +79,7 @@
 </br>
 
 - deliveryCost 는 Redis 서버를 사용함
-- deliveryCost 는 csv 문서로 업데이트 한다고 가정함
+- deliveryCost 는 csv 문서로 업데이트 한다고 가정함.
 - deliveryCost 는 항목이 자주 업데이트 된다고 가정함. 그래서 파일을 읽고 가공하여 redis 로 업데이트 하도록 구현함.
 
 ### Built With
